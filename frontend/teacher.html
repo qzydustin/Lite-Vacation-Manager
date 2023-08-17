@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="styles.css">
-    <title>管理员页面</title>
+    <title>教师页面</title>
     <script>
         function approve(id) {
-            fetch('http://localhost:8080/api/admin/approve', {
+            fetch('http://localhost:8080/api/teacher/approve', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -19,7 +19,7 @@
             row.parentNode.removeChild(row);
         }
         function reject(id) {
-            fetch('http://localhost:8080/api/admin/reject', {
+            fetch('http://localhost:8080/api/teacher/reject', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -32,7 +32,7 @@
             row.parentNode.removeChild(row);
         }
         function loadPending() {
-            fetch('http://localhost:8080/api/admin/pending')
+            fetch('http://localhost:8080/api/teacher/pending')
                 .then(response => response.json())
                 .then(data => {
                     var table = document.getElementById("pending");
@@ -42,17 +42,15 @@
                         var idCell = row.insertCell(0);
                         var nameCell = row.insertCell(1);
                         var studentIdCell = row.insertCell(2);
-                        var startCell = row.insertCell(3);
-                        var endCell = row.insertCell(4);
-                        var durationCell = row.insertCell(5);
-                        var reasonCell = row.insertCell(6);
-                        var approveCell = row.insertCell(7);
-                        var rejectCell = row.insertCell(8);
+                        var timeCell = row.insertCell(3);
+                        var durationCell = row.insertCell(4);
+                        var reasonCell = row.insertCell(5);
+                        var approveCell = row.insertCell(6);
+                        var rejectCell = row.insertCell(7);
                         idCell.innerHTML = data[i].id;
                         nameCell.innerHTML = data[i].name;
                         studentIdCell.innerHTML = data[i].studentId;
-                        startCell.innerHTML = data[i].start;
-                        endCell.innerHTML = data[i].end;
+                        timeCell.innerHTML = data[i].start + " - " + data[i].end;
                         durationCell.innerHTML = data[i].duration;
                         reasonCell.innerHTML = data[i].reason;
                         approveCell.innerHTML = "<button onclick=\"approve(" + data[i].id + ")\">批准</button>";
@@ -62,7 +60,7 @@
                 .catch(error => console.error(error));
         }
         function loadResults() {
-            fetch('http://localhost:8080/api/admin/pending')
+            fetch('http://localhost:8080/api/teacher/pending')
                 .then(response => response.json())
                 .then(data => {
                     var table = document.getElementById("results");
@@ -71,16 +69,14 @@
                         var idCell = row.insertCell(0);
                         var nameCell = row.insertCell(1);
                         var studentIdCell = row.insertCell(2);
-                        var startCell = row.insertCell(3);
-                        var endCell = row.insertCell(4);
-                        var durationCell = row.insertCell(5);
-                        var reasonCell = row.insertCell(6);
-                        var resultCell = row.insertCell(7);
+                        var timeCell = row.insertCell(3);
+                        var durationCell = row.insertCell(4);
+                        var reasonCell = row.insertCell(5);
+                        var resultCell = row.insertCell(6);
                         idCell.innerHTML = data[i].id;
                         nameCell.innerHTML = data[i].name;
                         studentIdCell.innerHTML = data[i].studentId;
-                        startCell.innerHTML = data[i].start;
-                        endCell.innerHTML = data[i].end;
+                        timeCell.innerHTML = data[i].start + " - " + data[i].end;
                         durationCell.innerHTML = data[i].duration;
                         reasonCell.innerHTML = data[i].reason;
                         resultCell.innerHTML = data[i].result;
@@ -99,11 +95,10 @@
     <table id="pending">
         <tr>
             <th>申请ID号</th>
-            <th>申请人姓名</th>
+            <th>学生姓名</th>
             <th>学号</th>
-            <th>请假开始时间</th>
-            <th>请假结束时间</th>
-            <th>假期时长</th>
+            <th>时间段</th>
+            <th>时长</th>
             <th>理由</th>
             <th>批准</th>
             <th>拒绝</th>
@@ -113,11 +108,10 @@
     <table id="results">
         <tr>
             <th>申请ID号</th>
-            <th>申请人姓名</th>
+            <th>学生姓名</th>
             <th>学号</th>
-            <th>请假开始时间</th>
-            <th>请假结束时间</th>
-            <th>假期时长</th>
+            <th>时间段</th>
+            <th>时长</th>
             <th>理由</th>
             <th>结果</th>
         </tr>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="styles.css">
-    <title>用户页面</title>
+    <title>学生页面</title>
     <script>
         function submitForm(event) {
             event.preventDefault();
@@ -11,7 +11,7 @@
             var end = document.getElementById("end").value;
             var reason = document.getElementById("reason").value;
             var data = {start: start, end: end, reason: reason};
-            fetch('http://localhost:8080/api/user/apply', {
+            fetch('http://localhost:8080/api/student/apply', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -22,7 +22,7 @@
               .catch(error => console.error(error))
         }
         function loadResults() {
-            fetch('http://localhost:8080/api/user/results')
+            fetch('http://localhost:8080/api/student/results')
                 .then(response => response.json())
                 .then(data => {
                     var table = document.getElementById("results");
