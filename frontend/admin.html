@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+    <title>管理员页面</title>
+    <script>
+        function approve(id) {
+            fetch('http://localhost:8080/api/admin/approve', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({id: id, approved: true})
+            }).then(response => response.json())
+              .then(data => console.log(data))
+              .catch(error => console.error(error));
+            var row = document.getElementById("row-" + id);
+            row.parentNode.removeChild(row);
+        }
+        function reject(id) {
+            fetch('http://localhost:8080/api/admin/reject', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({id: id, approved: false})
+            }).then(response => response.json())
+              .then(data => console.log(data))
+              .catch(error => console.error(error));
+            var row = document.getElementById("row-" + id);
+            row.parentNode.removeChild(row);
+        }
+        function loadPending() {
+            fetch('http://localhost:8080/api/admin/pending')
+                .then(response => response.json())
+                .then(data => {
+                    var table = document.getElementById("pending");
+                    for (var i = 0; i < data.length; i++) {
+                        var row = table.insertRow(-1);
+                        row.id = "row-" + data[i].id;
+                        var idCell = row.insertCell(0);
+                        var nameCell = row.insertCell(1);
+                        var studentIdCell = row.insertCell(2);
+                        var startCell = row.insertCell(3);
+                        var endCell = row.insertCell(4);
+                        var durationCell = row.insertCell(5);
+                        var reasonCell = row.insertCell(6);
+                        var approveCell = row.insertCell(7);
+                        var rejectCell = row.insertCell(8);
+                        idCell.innerHTML = data[i].id;
+                        nameCell.innerHTML = data[i].name;
+                        studentIdCell.innerHTML = data[i].studentId;
+                        startCell.innerHTML = data[i].start;
+                        endCell.innerHTML = data[i].end;
+                        durationCell.innerHTML = data[i].duration;
+                        reasonCell.innerHTML = data[i].reason;
+                        approveCell.innerHTML = "<button onclick=\"approve(" + data[i].id + ")\">批准</button>";
+                        rejectCell.innerHTML = "<button onclick=\"reject(" + data[i].id + ")\">拒绝</button>";
+                    }
+                })
+                .catch(error => console.error(error));
+        }
+        function loadResults() {
+            fetch('http://localhost:8080/api/admin/pending')
+                .then(response => response.json())
+                .then(data => {
+                    var table = document.getElementById("results");
+                    for (var i = 0; i < data.length; i++) {
+                        var row = table.insertRow(-1);
+                        var idCell = row.insertCell(0);
+                        var nameCell = row.insertCell(1);
+                        var studentIdCell = row.insertCell(2);
+                        var startCell = row.insertCell(3);
+                        var endCell = row.insertCell(4);
+                        var durationCell = row.insertCell(5);
+                        var reasonCell = row.insertCell(6);
+                        var resultCell = row.insertCell(7);
+                        idCell.innerHTML = data[i].id;
+                        nameCell.innerHTML = data[i].name;
+                        studentIdCell.innerHTML = data[i].studentId;
+                        startCell.innerHTML = data[i].start;
+                        endCell.innerHTML = data[i].end;
+                        durationCell.innerHTML = data[i].duration;
+                        reasonCell.innerHTML = data[i].reason;
+                        resultCell.innerHTML = data[i].result;
+                    }
+                })
+                .catch(error => console.error(error));
+        }
+        window.onload = function() {
+            loadPending();
+            loadResults();
+        };
+    </script>
+</head>
+<body>
+    <h2>待批准</h2>
+    <table id="pending">
+        <tr>
+            <th>申请ID号</th>
+            <th>申请人姓名</th>
+            <th>学号</th>
+            <th>请假开始时间</th>
+            <th>请假结束时间</th>
+            <th>假期时长</th>
+            <th>理由</th>
+            <th>批准</th>
+            <th>拒绝</th>
+        </tr>
+    </table>
+    <h2>历史记录</h2>
+    <table id="results">
+        <tr>
+            <th>申请ID号</th>
+            <th>申请人姓名</th>
+            <th>学号</th>
+            <th>请假开始时间</th>
+            <th>请假结束时间</th>
+            <th>假期时长</th>
+            <th>理由</th>
+            <th>结果</th>
+        </tr>
+    </table>
+</body>
+</html>

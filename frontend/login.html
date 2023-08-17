@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+    <title>登录页面</title>
+    <script>
+        function submitForm(event) {
+            event.preventDefault();
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var role = document.querySelector('input[name="role"]:checked').value;
+            var data = {username: username, password: password, role: role};
+            fetch('http://localhost:8080/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json())
+              .then(data => console.log(data))
+              .catch(error => console.error(error))
+        }
+    </script>
+</head>
+<body>
+    <h2>登录</h2>
+    <form onsubmit="submitForm(event)">
+        <label for="username">账号:</label><br>
+        <input type="text" id="username" name="username"><br>
+        <label for="password">密码:</label><br>
+        <input type="password" id="password" name="password"><br><br>
+        <input type="radio" id="admin" name="role" value="admin">
+        <label for="admin">管理员</label><br>
+        <input type="radio" id="student" name="role" value="student">
+        <label for="student">学生</label><br><br>
+        <input type="submit" value="登录">
+    </form> 
+</body>
+</html>

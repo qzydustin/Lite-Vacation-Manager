@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+    <title>用户页面</title>
+    <script>
+        function submitForm(event) {
+            event.preventDefault();
+            var start = document.getElementById("start").value;
+            var end = document.getElementById("end").value;
+            var reason = document.getElementById("reason").value;
+            var data = {start: start, end: end, reason: reason};
+            fetch('http://localhost:8080/api/user/apply', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json())
+              .then(data => console.log(data))
+              .catch(error => console.error(error))
+        }
+        function loadResults() {
+            fetch('http://localhost:8080/api/user/results')
+                .then(response => response.json())
+                .then(data => {
+                    var table = document.getElementById("results");
+                    for (var i = 0; i < data.length; i++) {
+                        var row = table.insertRow(-1);
+                        var idCell = row.insertCell(0);
+                        var timeCell = row.insertCell(1);
+                        var reasonCell = row.insertCell(2);
+                        var resultCell = row.insertCell(3);
+                        idCell.innerHTML = data[i].id;
+                        timeCell.innerHTML = data[i].start + " - " + data[i].end;
+                        reasonCell.innerHTML = data[i].reason;
+                        resultCell.innerHTML = data[i].result;
+                    }
+                })
+                .catch(error => console.error(error));
+        }
+        window.onload = loadResults;
+    </script>
+</head>
+<body>
+    <h2>申请假期</h2>
+    <form onsubmit="submitForm(event)">
+        <label for="start">开始时间:</label><br>
+        <input type="datetime-local" id="start" name="start"><br>
+        <label for="end">结束时间:</label><br>
+        <input type="datetime-local" id="end" name="end"><br><br>
+        <label for="reason">理由:</label><br>
+        <textarea id="reason" name="reason"></textarea><br><br>
+        <input type="submit" value="提交">
+    </form> 
+    <h2>申请结果</h2>
+    <table id="results">
+        <tr>
+            <th>申请ID号</th>
+            <th>时间段</th>
+            <th>理由</th>
+            <th>结果</th>
+        </tr>
+    </table>
+</body>
+</html>
